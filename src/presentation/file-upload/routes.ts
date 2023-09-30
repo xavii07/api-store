@@ -11,14 +11,11 @@ export class FileUploadRoutes {
     const uploadService = new FileUploadService();
     const controlador = new FileUploadController(uploadService);
 
-    router.post(
-      "/single/:type",
-      [
-        FileUploadMiddleware.containFiles,
-        TypeMiddleware.validTypes(["users", "products", "categories"]),
-      ],
-      controlador.uploadFile
-    );
+    router.use(FileUploadMiddleware.containFiles);
+    router.use(TypeMiddleware.validTypes(["users", "products", "categories"]));
+
+    router.post("/single/:type", controlador.uploadFile);
+    router.post("/multiple/:type", controlador.uploadMultipleFile);
 
     return router;
   }

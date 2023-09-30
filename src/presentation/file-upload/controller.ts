@@ -29,4 +29,18 @@ export class FileUploadController {
       )
       .catch((error) => this.handleErrors(error, res));
   };
+
+  uploadMultipleFile = (req: Request, res: Response) => {
+    const type = req.params.type;
+    const files = req.body.files as UploadedFile[];
+
+    this.fileUploadService
+      .uploadMultiple(files, `uploads/${type}`)
+      .then((uploaded) =>
+        res
+          .status(201)
+          .json({ uploaded, message: "Files uploaded successfully" })
+      )
+      .catch((error) => this.handleErrors(error, res));
+  };
 }
